@@ -1,0 +1,53 @@
+package template
+
+import (
+	"fmt"
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
+	"handler/function/domain/model"
+)
+
+templ ArticleCard(article model.Article, index int) {
+	<div class="card bg-base-100 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">{  fmt.Sprintf("(%d) %s", index, article.Link) }</h2>
+			<p>
+				@templ.Raw(mdToHTML(article.Content))
+			</p>
+			<div class="card-actions justify-end">
+				<button hx-delete={ "/article/" + article.ID.Hex() } class="btn btn-error" hx-swap="delete">Delete</button>
+				<a class="btn btn-primary" href={ templ.SafeURL(article.Link) }>Read</a>
+			</div>
+		</div>
+	</div>
+}
+
+templ ArticleList(articles []model.Article) {
+	<div class="flex flex-col justify-center items-center">
+		<div class="carousel rounded-box w-[75vw]">
+			for i, article := range articles {
+				<div id={ article.ID.Hex() } class="carousel-item w-full" hx-target="this">
+					@ArticleCard(article, i+1)
+				</div>
+			}
+		</div>
+		<div class="flex w-full justify-center gap-2 py-2">
+			for i, article := range articles {
+				<a href={ templ.SafeURL("#" + article.ID.Hex()) } class="btn btn-xs">{ fmt.Sprint(i+1) }</a>
+			}
+		</div>
+	</div>
+}
+
+func mdToHTML(md string) string {
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse([]byte(md))
+
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return string(markdown.Render(doc, renderer))
+}

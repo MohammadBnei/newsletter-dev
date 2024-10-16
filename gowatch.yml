@@ -1,0 +1,11 @@
+# Directory that do not need to listen for file changes
+excluded_paths:
+  - node_modules
+
+# main package path, can also be a single file, multiple files separated by commas
+build_pkg: "cmd/server.go"
+
+# log level, support debug, info, warn, error, fatal
+log_level: "debug"
+
+appname: "build/server"

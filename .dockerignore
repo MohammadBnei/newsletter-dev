@@ -1,0 +1,9 @@
+Dockerfile
+package.json
+bun.lockb
+tailwind.config.js
+Makefile
+gowatch.yml
+.goreleaser.yaml
+dist
+build
