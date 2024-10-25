@@ -6,12 +6,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"handler/function/domain/router"
 	"handler/function/domain/service"
 	"handler/function/infra/assets"
 	"handler/function/infra/config"
 	"handler/function/infra/mongo"
 	"handler/function/infra/repository"
-	"handler/function/infra/router"
 )
 
 func Init() (*chi.Mux, func()) {
