@@ -16,8 +16,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
     goarm:
       - "6"
       - "7"
